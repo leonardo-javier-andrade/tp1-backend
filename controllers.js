@@ -8,15 +8,16 @@ const getUsers = async () => {
 }
 
 const createUser = async (username, email, password) => {
+  const id = randomUUID()
     const newUser = { 
-        id: randomUUID(),
+        id: id,
         username : username, 
         email: email,
         password: password }
 
     const q = `INSERT INTO users (id, username, email, password) VALUES (?,?,?,?)`
 
-    const [response] = await db.query(q, [crypto.randomUUID(), username, email, password])
+    const [response] = await db.query(q, [id, username, email, password])
 
     if (response.serverStatus === 2) {
     return {
