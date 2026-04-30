@@ -10,7 +10,7 @@ let result;
 const username= params[1]
 const email= params[2]
 const password= params[3]
-
+let errorvalidation
 
 
 // regex validacion para que sean solo letras
@@ -18,6 +18,31 @@ const usernameRegex = /^[a-zA-Z]+$/
 
 //regex validacion para password con mayuscula minuscula y numero
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/
+
+//Funcion para comprobar datos validos
+
+const comprobacionDatos = () => {
+        // comprobacion de longitud de username
+        if (username.length < 3) {
+               return "error el username debe tener al menos 3 caracteres"
+            }
+    //comprobacion de username solo letras
+        if (!usernameRegex.test(username)) {
+               return "error el username debe contener solo letras"
+            }
+    // comprobacion de email con dominio gmail
+        if(!email.endsWith("@gmail.com")){
+                return "error el email debe ser de gmail"
+            }
+    // comprobacion de longitud de password
+        if(password.length < 6){
+                return "error la contraseña debe tener al menos 6 caracteres"
+            }
+    // comprobacion de password con mayuscula, minuscula y numero
+        if(!passwordRegex.test(password)){
+                return "error la contraseña debe incluir al menos una Mayuscula y un Número"
+            }
+        }
 
 
 // Operaciones acorde a los parametros ingresados
@@ -32,36 +57,43 @@ switch (operation) {
         if (!username || !email || !password) {
                result = "error faltan datos para la creacion de usuario"
             break}
-    // comprobacion de longitud de username
-        if (username.length < 3) {
-               result = "error el username debe tener al menos 3 caracteres"
-            break}
-    //comprobacion de username solo letras
-        if (!usernameRegex.test(username)) {
-               result = "error el username debe contener solo letras"
-            break}
-    // comprobacion de email con dominio gmail
-        if(!email.endsWith("@gmail.com")){
-                result = "error el email debe ser de gmail"
-            break}
-    // comprobacion de longitud de password
-        if(password.length < 6){
-                result = "error la contraseña debe tener al menos 6 caracteres"
-            break}
-    // comprobacion de password con mayuscula, minuscula y numero
-        if(!passwordRegex.test(password)){
-                result = "error la contraseña debe incluir al menos una Mayuscula y un Número"
-            break}
+// comprobacion de dato validos
+
+errorvalidation = comprobacionDatos()
+if (errorvalidation) {
+    result = errorvalidation
+    break
+}
   
     // Validados los datos se procede a la creación del usuario
     result = await createUser(username, email, password)
     break
 
   case "update":
-    result = await updateUser()
-    break
-  case "delete":
+    // verificacion de Id para actualizar usuario
+     if (!params[4]){
+         result = "error falta el id para actualizar el usuario"
+        break  }
+    // comprobacion de dato validos
 
+  // comprobacion de dato validos
+
+errorvalidation = comprobacionDatos()
+if (errorvalidation) {
+    result = errorvalidation
+    break
+}
+
+        const updates = { username: username, email: email, password: password }
+        result = await updateUser(params[4], updates)
+        break
+
+  
+   case "delete":
+    // Verficacion de datos necesarios para eliminar un usuario "ID"
+            if (params[1] === undefined) {
+               result = "error falta el id para eliminar el usuario"
+            break}  
     result = await deleteUser(params[1])
     break
   default:

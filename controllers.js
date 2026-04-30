@@ -26,12 +26,38 @@ const createUser = async (username, email, password) => {
 
     }}
 
-const updateUser = async () => {
-    return "Usuario actualizado"
-}
+const updateUser = async (id, updates) => {
+   try {
+    const q = `UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?`
+    const { username, email, password } = updates;
+    const [response] = await db.query(q, [username, email, password, id])
+
+    if (response.affectedRows > 0) {
+    return "Usuario actualizado exitosamente";}
+    
+    if(response.affectedRows === 0) {
+        return "No se encontró el usuario con el ID Nro : " + id + " proporcionado."
+    }
+     
+    } catch (error) {
+        return "Error al actualizar el usuario: "
+    }}
 
 const deleteUser = async (id) => {
-    return `Usuario con id ${id} eliminado`
+    try {
+        const q = `DELETE from users WHERE id = ?;`
+        const [response] = await db.query(q, [id]);
+// Verificar si se eliminna o no usuario desde la Base de Datos
+        if (response.affectedRows === 0) {
+            return "No se encontró el usuario con el ID Nro : " + id + " proporcionado."
+        }
+         if (response.affectedRows > 0) {
+        return "Usuario eliminado"
+
+      }
+    } catch (error) {
+        return "Error al eliminar el usuario: "
+    }
 }
 
 export { getUsers, createUser, updateUser, deleteUser}
