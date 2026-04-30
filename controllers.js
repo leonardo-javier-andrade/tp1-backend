@@ -1,13 +1,19 @@
 import { db } from "./config.js";
+import { randomUUID } from "crypto";
 
 const getUsers = async () => {
-return "lista de usuarios"}
+  const q = `SELECT * FROM users`
+  const [response] = await db.query(q)
+  return response
+}
 
 const createUser = async (username, email, password) => {
-    const newUser = { username : username, 
+    const newUser = { 
+        id: randomUUID(),
+        username : username, 
         email: email,
-         password: password }
-         return newUser
+        password: password }
+        return newUser
 }
 
 const updateUser = async () => {
