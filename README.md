@@ -20,10 +20,10 @@ USE tp_backend;
 
 **-- 3.** Crear la tabla de usuarios
 CREATE TABLE users (
-    id VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    password VARCHAR(100) NOT NULL
+    id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(50)  ,
+    email VARCHAR(50)  ,
+    password VARCHAR(50) 
 );
 Nota: Verifica que los datos de acceso en config.js (host, user, password) coincidan con tu configuración local.
 
